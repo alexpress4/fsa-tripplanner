@@ -603,9 +603,9 @@ fetch('/api')
 
 // ADD BUTTONS
 
-const button = document.createElement("button");
-button.className = "btn btn-xs btn-danger remove btn-circle";
-button.append("x");
+// const button = document.createElement("button");
+// button.className = "btn btn-xs btn-danger remove btn-circle";
+// button.append("x");
 
 document.getElementById("hotels-add").addEventListener('click',() => {
 
@@ -629,12 +629,25 @@ document.getElementById("hotels-add").addEventListener('click',() => {
     })
     .then(itemLocation => {
 
+      const button = document.createElement("button");
+      button.className = "btn btn-xs btn-danger remove btn-circle";
+      button.value = selectedId;
+      button.append("x");
+
       var listItem = document.createElement('li');
       listItem.innerHTML = selectedId;
       listItem.classList.add('itinerary-item');
       document.getElementById('hotels-list').append(listItem, button);
 
-      buildMarker('hotels', itemLocation).addTo(map);
+      var newMarker = buildMarker('hotels', itemLocation);
+      newMarker.addTo(map);
+
+      button.addEventListener('click', () => {
+
+        newMarker.remove();
+        listItem.remove();
+        button.remove();
+      })
     })
     .catch(console.error)
 
@@ -662,14 +675,25 @@ document.getElementById("restaurants-add").addEventListener('click',() => {
       })
       .then(itemLocation => {
 
-
+        const button = document.createElement("button");
+        button.className = "btn btn-xs btn-danger remove btn-circle";
+        button.value = selectedId;
+        button.append("x");
 
         var listItem = document.createElement('li');
         listItem.innerHTML = selectedId;
         listItem.classList.add('itinerary-item');
-        document.getElementById('restaurants-list').append(listItem);
+        document.getElementById('restaurants-list').append(listItem, button);
 
-        buildMarker('restaurants', itemLocation).addTo(map);
+        var newMarker = buildMarker('restaurants', itemLocation);
+        newMarker.addTo(map);
+
+        button.addEventListener('click', () => {
+
+          newMarker.remove();
+          listItem.remove();
+          button.remove();
+        })
       })
       .catch(console.error)
 
@@ -684,28 +708,50 @@ document.getElementById("activities-add").addEventListener('click',() => {
 
 
     fetch('/api')
-      .then(result => result.json())
+      .then(result => {
+        console.log('real p1 resolves', result)
+        return result.json()
+      })
       .then(data => {
         var itemLocation;
+        console.log('in p2', data)
         let n = data[2];
+        console.log('p2 resolves')
         for (var i = 0; i < n.length; i++){
           // console.log(n[i]['name'])
           if (n[i]['name'] === selectedId){
             itemLocation = n[i]['place']['location']
+            console.log('gonna return', itemLocation)
             return itemLocation
           }
         }
+
       })
       .then(itemLocation => {
+        console.log('promise resolves')
+        const button = document.createElement("button");
+        button.className = "btn btn-xs btn-danger remove btn-circle";
+        button.value = selectedId;
+        button.append("x");
 
         var listItem = document.createElement('li');
         listItem.innerHTML = selectedId;
         listItem.classList.add('itinerary-item');
-        document.getElementById('activities-list').append(listItem);
+        document.getElementById('activities-list').append(listItem, button);
 
-        buildMarker('activities', itemLocation).addTo(map);
+        var newMarker = buildMarker('activities', itemLocation);
+        newMarker.addTo(map);
+
+        button.addEventListener('click', () => {
+
+          newMarker.remove();
+          listItem.remove();
+          button.remove();
+        })
       })
       .catch(console.error)
+
+
 
 
 });
