@@ -641,6 +641,7 @@ document.getElementById("hotels-add").addEventListener('click',() => {
 
       var newMarker = buildMarker('hotels', itemLocation);
       newMarker.addTo(map);
+      map.flyTo({center: [itemLocation[0],itemLocation[1]], zoom: 15, speed: 0.4});
 
       button.addEventListener('click', () => {
 
@@ -687,6 +688,7 @@ document.getElementById("restaurants-add").addEventListener('click',() => {
 
         var newMarker = buildMarker('restaurants', itemLocation);
         newMarker.addTo(map);
+        map.flyTo({center: [itemLocation[0],itemLocation[1]], zoom: 15, speed: 0.4});
 
         button.addEventListener('click', () => {
 
@@ -709,26 +711,26 @@ document.getElementById("activities-add").addEventListener('click',() => {
 
     fetch('/api')
       .then(result => {
-        console.log('real p1 resolves', result)
+        // console.log('real p1 resolves', result)
         return result.json()
       })
       .then(data => {
         var itemLocation;
-        console.log('in p2', data)
+        // console.log('in p2', data)
         let n = data[2];
-        console.log('p2 resolves')
+        // console.log('p2 resolves')
         for (var i = 0; i < n.length; i++){
           // console.log(n[i]['name'])
           if (n[i]['name'] === selectedId){
             itemLocation = n[i]['place']['location']
-            console.log('gonna return', itemLocation)
+            // console.log('gonna return', itemLocation)
             return itemLocation
           }
         }
 
       })
       .then(itemLocation => {
-        console.log('promise resolves')
+        // console.log('promise resolves')
         const button = document.createElement("button");
         button.className = "btn btn-xs btn-danger remove btn-circle";
         button.value = selectedId;
@@ -741,6 +743,7 @@ document.getElementById("activities-add").addEventListener('click',() => {
 
         var newMarker = buildMarker('activities', itemLocation);
         newMarker.addTo(map);
+        map.flyTo({center: [itemLocation[0],itemLocation[1]], zoom: 15, speed: 0.4});
 
         button.addEventListener('click', () => {
 
